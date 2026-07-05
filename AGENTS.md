@@ -85,7 +85,9 @@ For behavior changes, bug fixes, refactors, dependency changes, public APIs, dat
 - implement one vertical slice at a time;
 - verify each slice before widening scope.
 
-For large changes, prefer independent subagents or independent review passes for implementation, specification compliance, code quality, tests, security, and product/user-facing implications when the tooling supports it.
+For non-trivial work, make an explicit delegation decision. Use subagents when the environment supports them, the work can be split into bounded, non-overlapping tasks, and delegation is likely to improve quality, coverage, speed, or safety. Good boundaries include implementation slices, specification compliance, code quality, tests, security, product/user-facing review, documentation, and focused research. Use independent review passes only when subagents are unavailable, unsuitable for the task, or insufficient on their own.
+
+Give each subagent a clear scope, inputs, constraints, and expected output. Do not delegate vague ownership, destructive actions, secret handling, tasks that require unresolved product judgment, tightly coupled edits, or the immediate critical path when the main agent has the necessary context. Treat subagent output as evidence, not authority: inspect relevant diffs or findings, resolve conflicts, integrate deliberately, and verify the combined result.
 
 ## 6. Engineering principles
 
@@ -223,6 +225,8 @@ Do not duplicate mutable command tables, endpoint lists, environment variable in
 
 Update the smallest set of docs in the same change when behavior, commands, structure, dependencies, workflows, public APIs, migrations, deployment behavior, configuration, safety boundaries, or agent instructions change.
 
+When updating this `AGENTS.md`, preserve the user's intent while translating it into precise, durable coding-agent terminology. Do not lift the user's prose, slang, ambiguous labels, temporary phrasing, or mistaken terminology directly into policy; preserve exact identifiers such as command names, file paths, product names, and established technical terms when exactness matters. Normalize requests into agent-actionable concepts such as authority, scope, verification, delegation, approval, safety boundaries, and documentation ownership. Do not broaden, narrow, or reframe the user's meaning beyond the evidence available. If multiple materially different policies could satisfy the request, inspect repository context first and ask only when no safe interpretation preserves the user's intent.
+
 Update this `AGENTS.md` without asking when:
 
 - a verified, durable project convention would prevent future agent mistakes;
@@ -245,8 +249,9 @@ Before claiming completion:
 4. Relevant docs, examples, migrations, generated artifacts, and configuration are synchronized.
 5. Focused and broad practical verification has been run, or unrun gates are explicitly reported with reasons.
 6. Security, privacy, accessibility, performance, and backward-compatibility risks have been considered where relevant.
-7. Review has checked both specification compliance and code quality, including over-engineering, duplication, naming, tests, error paths, and adversarial inputs.
-8. Temporary files, debug artifacts, generated scratch output, and secret-bearing files are removed.
-9. The handoff states what changed, how it was verified, and any residual risk.
+7. For non-trivial work, subagents were used when supported and suitable; if they were not used, the handoff states why they were unavailable, unsuitable, or unlikely to improve quality, coverage, speed, or safety.
+8. Review has checked both specification compliance and code quality, including over-engineering, duplication, naming, tests, error paths, adversarial inputs, and any subagent findings.
+9. Temporary files, debug artifacts, generated scratch output, and secret-bearing files are removed.
+10. The handoff states what changed, how it was verified, and any residual risk.
 
 Do not present assumptions as facts, partial work as complete, or unverified behavior as passing. Release, deploy, migration, and production-readiness claims must be limited to evidence produced in the current work.
