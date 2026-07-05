@@ -1,4 +1,4 @@
-# agentsmd-to-go
+# AGENTS.md-to-go
 
 Stop rewriting `AGENTS.md`.
 
